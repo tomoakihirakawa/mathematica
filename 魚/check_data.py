@@ -43,6 +43,8 @@ ax.plot(X, Q5)
 ax.plot(X, Q6)
 plt.show()
 
+print("Q0 size =", len(Q0))
+
 # ----------------- 時間をインデックスに変換する関数のチェック ---------------- #
 
 print(parames)
@@ -58,8 +60,8 @@ def tToi(tIN):
     global w, data_size
     t = tIN - math.floor(tIN / w)
     i = round(data_size/w*t)
-    if i is 0:
-        i = data_size
+    if i is data_size:
+        return 0
     return i
 
 
@@ -75,4 +77,20 @@ for i in range(30):
 fig, ax = plt.subplots()
 ax.set(xlabel='time [s]', ylabel='data index')
 ax.plot(T, toToiData)
+plt.show()
+
+# ---------------------- Mathematicaで計算したデータの参照のチェック ---------------------- #
+
+T = []
+Qs = []
+for i in range(200):
+    t = i/100.
+    index = tToi(t)
+    Qs.append(Q0[index])
+    T.append(t)
+    print(index, t)
+
+fig, ax = plt.subplots()
+ax.set(xlabel='time [s]', ylabel='data index')
+ax.plot(T, Qs)
 plt.show()
