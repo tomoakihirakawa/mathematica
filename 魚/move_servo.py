@@ -1,11 +1,20 @@
-from time import sleep
+from servomotor import *
+from time import sleep, time_ns
 import json
 import math
 import matplotlib.pyplot as plt
 plt.rcParams.update({"font.family": "Times New Roman", 'font.size': 20})
 
 
+def tToi(tIN, w, data_size):
+    t = tIN - math.floor(tIN / w)
+    i = round(data_size/w*t)
+    if i is data_size:
+        return 0
+    return i
+
 # ------------------ JSONファイルの読み込みをチェック ------------------ #
+
 
 n = 7
 data_size = 0
@@ -32,18 +41,6 @@ with open("./each_timeVSangle.json", 'r') as json_file:
         Q5.append(row[1][5])
         Q6.append(row[1][6])
 
-# fig, ax = plt.subplots()
-# ax.set(xlabel='time [s]', ylabel='wave height [m]')
-# ax.plot(X, Q0)
-# ax.plot(X, Q1)
-# ax.plot(X, Q2)
-# ax.plot(X, Q3)
-# ax.plot(X, Q4)
-# ax.plot(X, Q5)
-# ax.plot(X, Q6)
-# plt.show()
-
-# -------------------------------------------------------- #
 print(parames)
 
 r = parames["r"]
@@ -52,26 +49,40 @@ L = parames["L"]
 c1 = parames["c1"]
 c2 = parames["c2"]
 
-
-def tToi(tIN):
-    global w, data_size
-    t = tIN - math.floor(tIN / w)
-    i = round(data_size/w*t)
-    if i is 0:
-        i = data_size
-    return i
-
+# ---------------------- Mathematicaで計算したデータの参照のチェック ---------------------- #
 
 T = []
-toToiData = []
-for i in range(30):
-    t = i/10.
-    index = tToi(t)
-    toToiData.append(index)
+Qs = [[], [], [], [], [], [], []]
+for i in range(200):
+    t = i/100.
+    index = tToi(t, w, data_size)
+
+    Qs[0].append(Q0[index])
+    Qs[1].append(Q1[index])
+    Qs[2].append(Q2[index])
+    Qs[3].append(Q3[index])
+    Qs[4].append(Q4[index])
+    Qs[5].append(Q2[index])
+    Qs[6].append(Q6[index])
+
     T.append(t)
     print(index, t)
 
-fig, ax = plt.subplots()
-ax.set(xlabel='time [s]', ylabel='data index')
-ax.plot(T, toToiData)
-plt.show()
+#! -------------------------------------------------------- #
+#! 忘れずに servomotor package をこのディレクトリに保存しておくこと
+
+s = [servomotor(0, 0),
+     servomotor(1, 0),
+     servomotor(2, 0),
+     servomotor(3, 0),
+     servomotor(4, 0),
+     servomotor(5, 0),
+     servomotor(6, 0)]
+
+time.sleep(1)
+
+start = time_ns()
+while True:
+    t = (time_ns() - start)*10**-9
+    for i in range(7):
+        s[i].setDegree(Q0[tToi(t, w, data_size)])
