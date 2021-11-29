@@ -2,7 +2,8 @@ from time import sleep
 import json
 import math
 import matplotlib.pyplot as plt
-plt.rcParams.update({"font.family": "Times New Roman", 'font.size': 20})
+plt.rcParams.update({"font.family": "Times New Roman", 'font.size': 15})
+plt.tight_layout()
 
 
 def tToi(tIN, w, data_size):
