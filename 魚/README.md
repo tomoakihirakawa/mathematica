@@ -1,7 +1,7 @@
 # 使い方
 
 関節の角度.nbで魚の関節の時間変化を計算し，json形式で出力する．
-jsonの内容は，check_angle.pyで確認できる．
+jsonの内容は，check_data.pyで確認できる．
 
 ![each_angle.png](./each_angle.png)
 ![time_to_dataindex.png](./time_to_dataindex.png)
@@ -18,3 +18,4 @@ jsonファイルを読み込みその内容に従うよう
 * PCA9685パッケージ
 
 をpython_sharedからこのディレクトリにコピーしておくこと．
+

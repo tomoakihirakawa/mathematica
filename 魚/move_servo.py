@@ -76,16 +76,12 @@ for i in range(200):
 
 s = [servomotor(0, 0),
      servomotor(1, 0),
-     servomotor(2, 0),
-     servomotor(3, 0),
-     servomotor(4, 0),
-     servomotor(5, 0),
-     servomotor(6, 0)]
+     servomotor(2, 0)]
 
 time.sleep(1)
 
 start = time_ns()
 while True:
     t = (time_ns() - start)*10**-9
-    for i in range(7):
+    for i in range(3):
         s[i].setDegree(Q0[tToi(t, w, data_size)])
