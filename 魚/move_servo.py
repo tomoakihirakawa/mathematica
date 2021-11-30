@@ -7,11 +7,14 @@ plt.rcParams.update({"font.family": "Times New Roman", 'font.size': 20})
 
 
 def tToi(tIN, w, data_size):
-    t = tIN - math.floor(tIN / w)
-    i = round(data_size/w*t)
-    if i is data_size:
+    f = w / (2.*math.pi)
+    T = 1/f
+    t = tIN - T*math.floor(tIN/T)  # モジュロー
+    i = round(data_size*t/T)
+    if i is 0 or i is data_size:
         return 0
-    return i
+    else:
+        return i
 
 # ------------------ JSONファイルの読み込みをチェック ------------------ #
 

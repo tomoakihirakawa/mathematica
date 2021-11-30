@@ -6,15 +6,26 @@ plt.rcParams.update({"font.family": "Times New Roman", 'font.size': 15})
 plt.tight_layout()
 
 
+# def tToi(tIN, w, data_size):
+#     f = w / (2.*math.pi)
+#     t = tIN % (1./f)
+#     i = round(data_size/f*t)
+#     if i is data_size:
+#         return 0
+#     return i
+
 def tToi(tIN, w, data_size):
-    t = tIN - math.floor(tIN / w)
-    i = round(data_size/w*t)
-    if i is data_size:
+    f = w / (2.*math.pi)
+    T = 1/f
+    t = tIN - T*math.floor(tIN/T)  # モジュロー
+    i = round(data_size*t/T)
+    if i is 0 or i is data_size:
         return 0
-    return i
+    else:
+        return i
+
 
 # ------------------ JSONファイルの読み込みをチェック ------------------ #
-
 
 #% ----------------------- データの読み込み ----------------------- #
 n = 7
@@ -45,13 +56,14 @@ with open("./each_timeVSangle.json", 'r') as json_file:
 # プロット
 fig, ax = plt.subplots()
 ax.set(xlabel='time [s]', ylabel='wave height [m]')
-ax.plot(X, Q0)
-ax.plot(X, Q1)
-ax.plot(X, Q2)
-ax.plot(X, Q3)
-ax.plot(X, Q4)
-ax.plot(X, Q5)
-ax.plot(X, Q6)
+ax.plot(X, Q0, label='Q0')
+ax.plot(X, Q1, label='Q1')
+ax.plot(X, Q2, label='Q2')
+ax.plot(X, Q3, label='Q3')
+ax.plot(X, Q4, label='Q4')
+ax.plot(X, Q5, label='Q5')
+ax.plot(X, Q6, label='Q6')
+ax.legend()
 plt.show()
 
 print("Q0 size =", len(Q0))
@@ -68,7 +80,7 @@ c2 = parames["c2"]
 
 T = []
 toToiData = []
-for i in range(30):
+for i in range(50):
     t = i/10.
     index = tToi(t, w, data_size)
     toToiData.append(index)
@@ -102,5 +114,6 @@ for i in range(200):
 fig, ax = plt.subplots()
 ax.set(xlabel='time [s]', ylabel='servo angle [°]')
 for i in range(n):
-    ax.plot(T, Qs[i])
+    ax.plot(T, Qs[i], label="Q"+str(i))
+ax.legend()
 plt.show()
