@@ -11,7 +11,7 @@ def tToi(tIN, w, data_size):
     T = 1/f
     t = tIN - T*math.floor(tIN/T)  # モジュロー
     i = round(data_size*t/T)
-    if i is 0 or i is data_size:
+    if i < 0 or i > data_size:
         return 0
     else:
         return i
@@ -52,36 +52,57 @@ L = parames["L"]
 c1 = parames["c1"]
 c2 = parames["c2"]
 
+
 # ---------------------- Mathematicaで計算したデータの参照のチェック ---------------------- #
 
-T = []
-Qs = [[], [], [], [], [], [], []]
-for i in range(200):
-    t = i/100.
-    index = tToi(t, w, data_size)
+# T = []
+# Qs = [[], [], [], [], [], [], []]
 
-    Qs[0].append(Q0[index])
-    Qs[1].append(Q1[index])
-    Qs[2].append(Q2[index])
-    Qs[3].append(Q3[index])
-    Qs[4].append(Q4[index])
-    Qs[5].append(Q2[index])
-    Qs[6].append(Q6[index])
+# for i in range(200):
+#     t = i/100.
+#     index = tToi(t, w, data_size)
 
-    T.append(t)
-    print(index, t)
+#     Qs[0].append(Q0[index])
+#     Qs[1].append(Q1[index])
+#     Qs[2].append(Q2[index])
+#     Qs[3].append(Q3[index])
+#     Qs[4].append(Q4[index])
+#     Qs[5].append(Q2[index])
+#     Qs[6].append(Q6[index])
+
+#     T.append(t)
+#     print(index, t)
 
 #! -------------------------------------------------------- #
 #! 忘れずに servomotor package をこのディレクトリに保存しておくこと
 
-s = [servomotor(0, 0),
-     servomotor(1, 0),
-     servomotor(2, 0)]
+s0 = servomotor(0, 0)
+s1 = servomotor(1, 0)
+s2 = servomotor(2, 0)
+s3 = servomotor(3, 0)
+s4 = servomotor(4, 0)
+s5 = servomotor(5, 0)
+s6 = servomotor(6, 0)
+
+b0 = 90
+b1 = 90
+b2 = 90
+b3 = 90
+b4 = 90
+b5 = 90
+b6 = 90
 
 time.sleep(1)
-
 start = time_ns()
+c = 180./math.pi
+
 while True:
     t = (time_ns() - start)*10**-9
-    for i in range(3):
-        s[i].setDegree(Q0[tToi(t, w, data_size)])
+    index = tToi(t, w, data_size)
+    s0.setDegree(Q0[index]*c + b0)
+    s1.setDegree(Q1[index]*c + b1)
+    s2.setDegree(Q2[index]*c + b2)
+    s3.setDegree(Q3[index]*c + b3)
+    s4.setDegree(Q4[index]*c + b4)
+    s5.setDegree(Q5[index]*c + b5)
+    s6.setDegree(Q6[index]*c + b6)
